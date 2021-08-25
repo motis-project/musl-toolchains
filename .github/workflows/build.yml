@@ -1,0 +1,85 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  release:
+    types:
+      - published
+
+jobs:
+  build-ct-ng:
+    runs-on: ubuntu-20.04
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - target: x86_64-multilib-linux-musl
+    steps:
+      - name: Download crosstool-ng
+        uses: actions/checkout@v2
+        with:
+          repository: crosstool-ng/crosstool-ng
+          ref: 672c13eb00723b23e3a1c21ca10545ce2da84822
+
+      # ==== DEPENDENCIES ====
+      - name: Install crosstool-ng dependencies
+        env:
+          DEBIAN_FRONTEND: noninteractive
+        run: |
+          sudo apt-get install -y --no-install-recommends gcc g++ gperf bison flex texinfo help2man make libncurses5-dev python3-dev autoconf automake libtool libtool-bin gawk wget bzip2 xz-utils unzip patch libstdc++6 rsync git
+
+      # ==== BUILD CROSSTOOL-NG FROM SOURCE ====
+      - name: Bootstrap
+        run: ./bootstrap
+
+      - name: Configure
+        run: |
+          ./configure --prefix=$HOME/crosstool-ng
+
+      - name: Make
+        run: make
+
+      - name: Make install
+        run: make install
+
+      # ==== BUILD TOOLCHAIN ====
+      - name: Get Repo
+        uses: actions/checkout@v2
+
+      - name: Build toolchain
+        run: |
+          export PATH=$PATH:$HOME/crosstool-ng/bin
+          ls -la
+          cd ${{ matrix.config.target }}
+          ct-ng build
+
+      - name: Show log on failure
+        if: ${{ failure() }}
+        run: |
+          cd ${{ matrix.config.target }}
+          ls -la
+          cat build.log
+
+      # ==== PACKAGE  ====
+      - name: Package
+        run: tar cJf ${{ matrix.config.target }}.tar.xz $HOME/x-tools/${{ matrix.config.target }}
+
+      - name: Upload
+        uses: actions/upload-artifact@v1
+        with:
+          name: ${{ matrix.config.target }}
+          path: ${{ matrix.config.target }}.tar.xz
+
+      - name: Upload Release
+        if: github.event.action == 'published'
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ matrix.config.target }}.tar.xz
+          asset_name: ${{ matrix.config.target }}.tar.xz
+          asset_content_type: application/x-tar
