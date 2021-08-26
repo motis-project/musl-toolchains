@@ -65,7 +65,7 @@ jobs:
 
       # ==== PACKAGE  ====
       - name: Package
-        run: tar cJf ${{ matrix.config.target }}.tar.xz $HOME/x-tools/${{ matrix.config.target }}
+        run: tar cJf ${{ matrix.config.target }}.tar.xz -C $HOME/x-tools ${{ matrix.config.target }}
 
       - name: Upload
         uses: actions/upload-artifact@v1
