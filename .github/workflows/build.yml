@@ -17,6 +17,7 @@ jobs:
       matrix:
         config:
           - target: x86_64-multilib-linux-musl
+          - target: arm-unknown-linux-musleabi
     steps:
       - name: Download crosstool-ng
         uses: actions/checkout@v2
