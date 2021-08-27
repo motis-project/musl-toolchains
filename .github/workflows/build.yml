@@ -18,7 +18,7 @@ jobs:
         config:
           - target: x86_64-multilib-linux-musl
           - target: arm-unknown-linux-musleabi
-          - target: aarch64-unknown-linux-musleabi
+          - target: aarch64-unknown-linux-musl
     steps:
       - name: Download crosstool-ng
         uses: actions/checkout@v2
