@@ -57,6 +57,7 @@ jobs:
           ls -la
           cd ${{ matrix.config.target }}
           ct-ng build
+          chmod +w $HOME/x-tools/${{ matrix.config.target }}
           cp toolchain.cmake $HOME/x-tools/${{ matrix.config.target }}
 
       # ==== PACKAGE  ====
