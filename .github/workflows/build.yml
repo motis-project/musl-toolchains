@@ -57,19 +57,11 @@ jobs:
           ls -la
           cd ${{ matrix.config.target }}
           ct-ng build
-
-      - name: Show log on failure
-        if: ${{ failure() }}
-        run: |
-          cd ${{ matrix.config.target }}
-          ls -la
-          cat build.log
+          cp toolchain.cmake $HOME/x-tools/${{ matrix.config.target }}
 
       # ==== PACKAGE  ====
       - name: Package
-        run: |
-          cp ${{ matrix.config.target }}/toolchain.cmake $HOME/x-tools/${{ matrix.config.target }}
-          tar cJf ${{ matrix.config.target }}.tar.xz -C $HOME/x-tools ${{ matrix.config.target }}
+        run: tar cJf ${{ matrix.config.target }}.tar.xz -C $HOME/x-tools ${{ matrix.config.target }}
 
       - name: Upload
         uses: actions/upload-artifact@v1
