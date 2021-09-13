@@ -57,13 +57,8 @@ jobs:
           ls -la
           cd ${{ matrix.config.target }}
           ct-ng build
-
-      - name: Show log on failure
-        if: ${{ failure() }}
-        run: |
-          cd ${{ matrix.config.target }}
-          ls -la
-          cat build.log
+          chmod +w $HOME/x-tools/${{ matrix.config.target }}
+          cp toolchain.cmake $HOME/x-tools/${{ matrix.config.target }}
 
       # ==== PACKAGE  ====
       - name: Package
