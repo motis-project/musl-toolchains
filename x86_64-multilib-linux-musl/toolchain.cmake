@@ -1,6 +1,0 @@
-set(CMAKE_CROSSCOMPILING 1)
-set(CMAKE_LIBRARY_PATH ${CMAKE_CURRENT_LIST_DIR}/lib)
-set(CMAKE_SYSROOT ${CMAKE_CURRENT_LIST_DIR}/x86_64-multilib-linux-musl/sysroot)
-set(CMAKE_C_COMPILER ${CMAKE_CURRENT_LIST_DIR}/bin/x86_64-multilib-linux-musl-gcc)
-set(CMAKE_CXX_COMPILER ${CMAKE_CURRENT_LIST_DIR}/bin/x86_64-multilib-linux-musl-g++)
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
