@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: crosstool-ng/crosstool-ng
-          ref: 36ad0b17a732aaffe4701d5d8d410d6e3e3abba9
+          ref: 810021d9125a66f6a7cd0862d59aab3d32252a9f
 
       # ==== DEPENDENCIES ====
       - name: Install crosstool-ng dependencies
