@@ -65,7 +65,7 @@ jobs:
         run: tar cJf ${{ matrix.config.target }}.tar.xz -C $HOME/x-tools ${{ matrix.config.target }}
 
       - name: Upload
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.config.target }}
           path: ${{ matrix.config.target }}.tar.xz
